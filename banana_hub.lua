@@ -1,0 +1,1 @@
+elseif game.PlaceId == 7449423635 or game.PlaceId == 2753915549 or game.PlaceId == 4442272183 or game.PlaceId == 122478697296975 or UniverseID == 994732206 then loadstring(game:HttpGet("https://raw.githubusercontent.com/tunglinh-png/Banana-hub/refs/heads/main/banana-hub.lua"))()
