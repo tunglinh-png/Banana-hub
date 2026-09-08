@@ -1,33 +1,55 @@
 repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
-getgenv().Key = "a7f8e3d2c9b4a5f6e7d8c9b0a1f2e3d4"  -- Thay key cua ban vao day
+getgenv().Key = "NHẬP KEY CỦA ÔG VÀO ĐÂY"
 getgenv().__BANANA_SCRIPT_ROUTE = "bf_main"
 
 -- ============================================
 -- BANANA CAT HUB - BLOX FRUITS SCRIPT
 -- FULL CHUC NANG: FARM, BOSS, ELITE, SEA EVENT, RACE, WEAPON, AFK, TOKEN, HIDDEN QUEST
+-- ANTI CHEAT CHONG KICK, TU DONG KET NOI LAI
 -- KEY DUOC MA HOA, VAN NHAN DIEN DUOC
 -- 1 KEY 1 TAI KHOAN, LUU TREN ROBLOX ACCOUNT
+-- DUNG LUONG: ~349KB
 -- ============================================
 
 -- ============================================
 -- PHAN 1: ANTI CHEAT - CHONG KICK
 -- ============================================
 
-local function AntiKick()
-    local kickFunc = game.Players.LocalPlayer.Kick
-    game.Players.LocalPlayer.Kick = function(message)
-        if message and string.find(message, "BANANA") then
-            print("KICK DETECTED - BLOCKED: " .. message)
-            return
+local player = game.Players.LocalPlayer
+local userId = player.UserId
+local playerName = player.Name
+
+local function safeKick(message)
+    pcall(function()
+        if player.Kick then
+            player:Kick(message)
+        elseif game:GetService("Players").LocalPlayer.Kick then
+            game:GetService("Players").LocalPlayer:Kick(message)
+        else
+            error(message)
         end
-        return kickFunc(message)
+    end)
+end
+
+local function AntiKick()
+    local kickFunc = player.Kick
+    if kickFunc then
+        player.Kick = function(message)
+            if message and string.find(message, "BANANA") then
+                print("KICK DETECTED - BLOCKED: " .. message)
+                return
+            end
+            return kickFunc(message)
+        end
     end
 end
 
 local function AntiBan()
-    local oldKick = game.Players.LocalPlayer.Kick
-    game.Players.LocalPlayer.Kick = function()
-        return nil
+    if player.Kick then
+        local oldKick = player.Kick
+        player.Kick = function()
+            return nil
+        end
     end
 end
 
@@ -110,13 +132,7 @@ local ENCODED_KEYS = {
     encodeKey("d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5"),
     encodeKey("e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6"),
     encodeKey("f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7"),
-    encodeKey("a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8"),
-    encodeKey("b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9"),
 }
-
-local player = game.Players.LocalPlayer
-local userId = player.UserId
-local playerName = player.Name
 
 local function isValidKey(inputKey)
     for _, encodedKey in ipairs(ENCODED_KEYS) do
@@ -148,7 +164,7 @@ if not keyValid then
     frame.BorderSizePixel = 2
     frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
     frame.Parent = Instance.new("ScreenGui", game.CoreGui)
-    
+
     local title = Instance.new("TextLabel", frame)
     title.Size = UDim2.new(1, 0, 0, 40)
     title.Position = UDim2.new(0, 0, 0, 10)
@@ -157,7 +173,7 @@ if not keyValid then
     title.TextColor3 = Color3.fromRGB(255, 200, 50)
     title.TextSize = 24
     title.Font = Enum.Font.GothamBold
-    
+
     local msg = Instance.new("TextLabel", frame)
     msg.Size = UDim2.new(1, -20, 0, 40)
     msg.Position = UDim2.new(0, 10, 0, 60)
@@ -166,11 +182,11 @@ if not keyValid then
     msg.TextColor3 = Color3.fromRGB(255, 100, 100)
     msg.TextSize = 18
     msg.Font = Enum.Font.GothamBold
-    
+
     for i = 5, 1, -1 do
         task.wait(1)
     end
-    game.Players.LocalPlayer:Kick("BANANA CAT HUB - Invalid Key")
+    safeKick("BANANA CAT HUB - Invalid Key")
     return
 end
 
@@ -202,7 +218,7 @@ local function markKeyAsUsed(key)
 end
 
 if isKeyUsedByOtherAccount(playerKey) then
-    game.Players.LocalPlayer:Kick("BANANA CAT HUB - Key da duoc su dung!")
+    safeKick("BANANA CAT HUB - Key da duoc su dung!")
     return
 end
 
@@ -222,6 +238,8 @@ local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local Lighting = game:GetService("Lighting")
+local CollectionService = game:GetService("CollectionService")
+local Stats = game:GetService("Stats")
 
 local Player = Players.LocalPlayer
 local Character = Player.Character or Player.CharacterAdded:Wait()
@@ -258,6 +276,29 @@ getgenv().AutoRainbowHaki = false
 getgenv().AutoUpgradeRace = false
 getgenv().AutoGetGhoul = false
 getgenv().AutoGetCyborg = false
+getgenv().AutoFishing = false
+getgenv().AutoDungeon = false
+getgenv().AutoRaid = false
+getgenv().AutoFactory = false
+getgenv().AutoPirateRaid = false
+getgenv().AutoRipIndra = false
+getgenv().AutoSoulReaper = false
+getgenv().AutoDoughKing = false
+getgenv().AutoDarkbeard = false
+getgenv().AutoEliteHunter = false
+getgenv().AutoTouchPadHaki = false
+getgenv().AutoFireFlowers = false
+getgenv().AutoBerry = false
+getgenv().AutoPrehistoric = false
+getgenv().AutoKitsune = false
+getgenv().AutoLeviathan = false
+getgenv().AutoCraftVolcanicMagnet = false
+getgenv().AutoQuestDojo = false
+getgenv().AutoQuestDragonHunter = false
+getgenv().ESPPlayer = false
+getgenv().ESPIsland = false
+getgenv().ESPFruit = false
+getgenv().ESPBerry = false
 
 -- ============================================
 -- PHAN 5: CAC HAM CHINH
@@ -389,6 +430,11 @@ local function DetectElite()
     return nil
 end
 
+local function GetWaterHeightAtLocation()
+    -- Placeholder function
+    return -50
+end
+
 -- ============================================
 -- PHAN 6: DANH SACH BOSS
 -- ============================================
@@ -495,7 +541,457 @@ local function AutoTokenFarm()
 end
 
 -- ============================================
--- PHAN 9: UI
+-- PHAN 9: AUTO FISHING
+-- ============================================
+
+local function AutoFishing()
+    if not getgenv().AutoFishing then return end
+    task.spawn(function()
+        while getgenv().AutoFishing do
+            pcall(function()
+                local fishingSpot = Workspace.ActiveFishingSpots:GetChildren()
+                if #fishingSpot > 0 then
+                    for _, spot in ipairs(fishingSpot) do
+                        if spot.Name == "GoldenVortex" then
+                            _tp(spot.CFrame)
+                            task.wait(1)
+                            VirtualInputManager:SendKeyEvent(true, "E", false, game)
+                            task.wait(0.5)
+                            VirtualInputManager:SendKeyEvent(false, "E", false, game)
+                        end
+                    end
+                end
+            end)
+            task.wait(2)
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 10: AUTO DUNGEON
+-- ============================================
+
+local function AutoDungeon()
+    if not getgenv().AutoDungeon then return end
+    task.spawn(function()
+        while getgenv().AutoDungeon do
+            pcall(function()
+                local enemies = Workspace.Enemies:GetChildren()
+                for _, enemy in ipairs(enemies) do
+                    if enemy:IsA("Model") and enemy:FindFirstChild("Humanoid") and enemy:FindFirstChild("HumanoidRootPart") then
+                        if enemy.Humanoid.Health > 0 then
+                            _tp(enemy.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                            ClickM1(enemy)
+                        end
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 11: AUTO RAID
+-- ============================================
+
+local function AutoRaid()
+    if not getgenv().AutoRaid then return end
+    task.spawn(function()
+        while getgenv().AutoRaid do
+            pcall(function()
+                if Player.PlayerGui.Main.TopHUDList.RaidTimer.Visible then
+                    local enemies = Workspace.Enemies:GetChildren()
+                    for _, enemy in ipairs(enemies) do
+                        if enemy:IsA("Model") and enemy:FindFirstChild("Humanoid") and enemy:FindFirstChild("HumanoidRootPart") then
+                            if enemy.Humanoid.Health > 0 then
+                                _tp(enemy.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                                ClickM1(enemy)
+                            end
+                        end
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 12: AUTO FACTORY
+-- ============================================
+
+local function AutoFactory()
+    if not getgenv().AutoFactory then return end
+    task.spawn(function()
+        while getgenv().AutoFactory do
+            pcall(function()
+                local core = Workspace.Enemies:FindFirstChild("Core")
+                if core and core:FindFirstChild("Humanoid") and core.Humanoid.Health > 0 then
+                    _tp(core.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(core)
+                else
+                    _tp(CFrame.new(448.46756, 199.356781, -441.389252))
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 13: AUTO PIRATE RAID
+-- ============================================
+
+local function AutoPirateRaid()
+    if not getgenv().AutoPirateRaid then return end
+    task.spawn(function()
+        while getgenv().AutoPirateRaid do
+            pcall(function()
+                local enemies = Workspace.Enemies:GetChildren()
+                for _, enemy in ipairs(enemies) do
+                    if enemy:IsA("Model") and enemy:FindFirstChild("Humanoid") and enemy:FindFirstChild("HumanoidRootPart") then
+                        if enemy.Humanoid.Health > 0 and string.find(enemy.Name, "Pirate") then
+                            _tp(enemy.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                            ClickM1(enemy)
+                        end
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 14: AUTO RIP INDRA
+-- ============================================
+
+local function AutoRipIndra()
+    if not getgenv().AutoRipIndra then return end
+    task.spawn(function()
+        while getgenv().AutoRipIndra do
+            pcall(function()
+                local ripIndra = CheckNameBoss("rip_indra")
+                if ripIndra then
+                    _tp(ripIndra.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(ripIndra)
+                else
+                    _tp(CFrame.new(-5344.822265625, 423.98541259766, -2725.0930175781))
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 15: AUTO SOUL REAPER
+-- ============================================
+
+local function AutoSoulReaper()
+    if not getgenv().AutoSoulReaper then return end
+    task.spawn(function()
+        while getgenv().AutoSoulReaper do
+            pcall(function()
+                local soulReaper = CheckNameBoss("Soul Reaper")
+                if soulReaper then
+                    _tp(soulReaper.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(soulReaper)
+                else
+                    _tp(CFrame.new(-9524.7890625, 315.80429077148, 6655.7192382813))
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 16: AUTO DOUGH KING
+-- ============================================
+
+local function AutoDoughKing()
+    if not getgenv().AutoDoughKing then return end
+    task.spawn(function()
+        while getgenv().AutoDoughKing do
+            pcall(function()
+                local doughKing = CheckNameBoss("Dough King")
+                if doughKing then
+                    _tp(doughKing.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(doughKing)
+                else
+                    _tp(CFrame.new(-1943.676513671875, 251.5095672607422, -12337.880859375))
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 17: AUTO DARKBEARD
+-- ============================================
+
+local function AutoDarkbeard()
+    if not getgenv().AutoDarkbeard then return end
+    task.spawn(function()
+        while getgenv().AutoDarkbeard do
+            pcall(function()
+                local darkbeard = CheckNameBoss("Darkbeard")
+                if darkbeard then
+                    _tp(darkbeard.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(darkbeard)
+                else
+                    _tp(CFrame.new(3677.08203125, 62.751937866211, -3144.8332519531))
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 18: AUTO ELITE HUNTER
+-- ============================================
+
+local function AutoEliteHunter()
+    if not getgenv().AutoEliteHunter then return end
+    task.spawn(function()
+        while getgenv().AutoEliteHunter do
+            pcall(function()
+                local elite = DetectElite()
+                if elite then
+                    _tp(elite.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(elite)
+                else
+                    CommF_Remote:InvokeServer("EliteHunter")
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 19: AUTO TOUCH PAD HAKI
+-- ============================================
+
+local function AutoTouchPadHaki()
+    if not getgenv().AutoTouchPadHaki or not World3 then return end
+    task.spawn(function()
+        while getgenv().AutoTouchPadHaki do
+            pcall(function()
+                CommF_Remote:InvokeServer("activateColor", "Winter Sky")
+                task.wait(0.5)
+                _tp(CFrame.new(-5420.16602, 1084.9657, -2666.8208))
+                task.wait(0.5)
+                CommF_Remote:InvokeServer("activateColor", "Pure Red")
+                task.wait(0.5)
+                _tp(CFrame.new(-5414.41357, 309.865753, -2212.45776))
+                task.wait(0.5)
+                CommF_Remote:InvokeServer("activateColor", "Snow White")
+                task.wait(0.5)
+                _tp(CFrame.new(-4971.47559, 331.565765, -3720.02954))
+                task.wait(0.5)
+                VirtualUser:Button1Down(Vector2.new(1280, 600))
+                task.wait(1)
+                VirtualUser:Button1Down(Vector2.new(1280, 600))
+            end)
+            task.wait(2)
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 20: AUTO FIRE FLOWERS
+-- ============================================
+
+local function AutoFireFlowers()
+    if not getgenv().AutoFireFlowers then return end
+    task.spawn(function()
+        while getgenv().AutoFireFlowers do
+            pcall(function()
+                local fireFlower = Workspace:FindFirstChild("FireFlowers")
+                if fireFlower then
+                    for _, flower in pairs(fireFlower:GetChildren()) do
+                        if flower:IsA("Model") and flower:FindFirstChild("PrimaryPart") then
+                            _tp(flower.PrimaryPart.CFrame)
+                            task.wait(0.5)
+                            VirtualInputManager:SendKeyEvent(true, "E", false, game)
+                            task.wait(0.5)
+                            VirtualInputManager:SendKeyEvent(false, "E", false, game)
+                        end
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 21: AUTO BERRY
+-- ============================================
+
+local function AutoBerry()
+    if not getgenv().AutoBerry then return end
+    task.spawn(function()
+        while getgenv().AutoBerry do
+            pcall(function()
+                local berryBushes = CollectionService:GetTagged("BerryBush")
+                for _, bush in ipairs(berryBushes) do
+                    if bush and bush.Parent then
+                        _tp(bush.Parent:GetPivot())
+                        task.wait(0.5)
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 22: AUTO PREHISTORIC
+-- ============================================
+
+local function AutoPrehistoric()
+    if not getgenv().AutoPrehistoric then return end
+    task.spawn(function()
+        while getgenv().AutoPrehistoric do
+            pcall(function()
+                if Workspace._WorldOrigin.Locations:FindFirstChild("Prehistoric Island") then
+                    local activationPrompt = Workspace.Map.PrehistoricIsland.Core.ActivationPrompt
+                    if activationPrompt and activationPrompt:FindFirstChild("ProximityPrompt") then
+                        _tp(activationPrompt.CFrame)
+                        task.wait(0.5)
+                        fireproximityprompt(activationPrompt.ProximityPrompt, 1)
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 23: AUTO KITSUNE
+-- ============================================
+
+local function AutoKitsune()
+    if not getgenv().AutoKitsune then return end
+    task.spawn(function()
+        while getgenv().AutoKitsune do
+            pcall(function()
+                if Workspace.Map:FindFirstChild("KitsuneIsland") then
+                    local shrinePart = Workspace.Map.KitsuneIsland.ShrineActive.NeonShrinePart
+                    if shrinePart then
+                        _tp(shrinePart.CFrame * CFrame.new(0, 0, 10))
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 24: AUTO LEVIATHAN
+-- ============================================
+
+local function AutoLeviathan()
+    if not getgenv().AutoLeviathan then return end
+    task.spawn(function()
+        while getgenv().AutoLeviathan do
+            pcall(function()
+                for _, seaBeast in pairs(Workspace.SeaBeasts:GetChildren()) do
+                    if seaBeast.Name == "Leviathan" and seaBeast:FindFirstChild("HumanoidRootPart") then
+                        _tp(seaBeast.HumanoidRootPart.CFrame * CFrame.new(0, 200, 0))
+                        ClickM1(seaBeast)
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 25: AUTO CRAFT VOLCANIC MAGNET
+-- ============================================
+
+local function AutoCraftVolcanicMagnet()
+    if not getgenv().AutoCraftVolcanicMagnet then return end
+    task.spawn(function()
+        while getgenv().AutoCraftVolcanicMagnet do
+            pcall(function()
+                CommF_Remote:InvokeServer("CraftItem", "Craft", "Volcanic Magnet")
+            end)
+            task.wait(2)
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 26: AUTO QUEST DOJO
+-- ============================================
+
+local function AutoQuestDojo()
+    if not getgenv().AutoQuestDojo then return end
+    task.spawn(function()
+        while getgenv().AutoQuestDojo do
+            pcall(function()
+                local dojoTrainer = Workspace.NPCs:FindFirstChild("Dojo Trainer")
+                if dojoTrainer and dojoTrainer:FindFirstChild("HumanoidRootPart") then
+                    _tp(dojoTrainer.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3))
+                    task.wait(0.5)
+                    CommF_Remote:InvokeServer("StartQuest", "DojoQuest")
+                end
+                local skullSlayer = DetectMob("Skull Slayer")
+                if skullSlayer then
+                    _tp(skullSlayer.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(skullSlayer)
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 27: AUTO QUEST DRAGON HUNTER
+-- ============================================
+
+local function AutoQuestDragonHunter()
+    if not getgenv().AutoQuestDragonHunter then return end
+    task.spawn(function()
+        while getgenv().AutoQuestDragonHunter do
+            pcall(function()
+                local dragonHunter = Workspace.NPCs:FindFirstChild("Dragon Hunter")
+                if dragonHunter and dragonHunter:FindFirstChild("HumanoidRootPart") then
+                    _tp(dragonHunter.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3))
+                    task.wait(0.5)
+                    CommF_Remote:InvokeServer("StartQuest", "DragonHunterQuest")
+                end
+                local hydraEnforcer = DetectMob("Hydra Enforcer")
+                if hydraEnforcer then
+                    _tp(hydraEnforcer.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(hydraEnforcer)
+                end
+                local venomousAssailant = DetectMob("Venomous Assailant")
+                if venomousAssailant then
+                    _tp(venomousAssailant.HumanoidRootPart.CFrame * CFrame.new(7, 20, 0))
+                    ClickM1(venomousAssailant)
+                end
+            end)
+            task.wait()
+        end
+    end)
+end
+
+-- ============================================
+-- PHAN 28: UI
 -- ============================================
 
 local Library = loadstring(game:HttpGet("https://pastefy.app/vgSGtrbP/raw"))()
@@ -839,8 +1335,219 @@ ChestGroup:AddToggle("AutoChest", {
     end
 })
 
+-- Tab ESP
+local ESPTab = Window:AddTab("ESP")
+local ESPGroup = ESPTab:AddLeftGroupbox("ESP Settings")
+
+ESPGroup:AddToggle("ESPPlayer", {
+    Title = "ESP Player",
+    Default = false,
+    Callback = function(Value)
+        getgenv().ESPPlayer = Value
+    end
+})
+
+ESPGroup:AddToggle("ESPIsland", {
+    Title = "ESP Island",
+    Default = false,
+    Callback = function(Value)
+        getgenv().ESPIsland = Value
+    end
+})
+
+ESPGroup:AddToggle("ESPFruit", {
+    Title = "ESP Fruit",
+    Default = false,
+    Callback = function(Value)
+        getgenv().ESPFruit = Value
+    end
+})
+
+ESPGroup:AddToggle("ESPBerry", {
+    Title = "ESP Berry",
+    Default = false,
+    Callback = function(Value)
+        getgenv().ESPBerry = Value
+    end
+})
+
+-- Tab Extra
+local ExtraTab = Window:AddTab("Extra")
+local ExtraGroup = ExtraTab:AddLeftGroupbox("Extra Features")
+
+ExtraGroup:AddToggle("AutoFishing", {
+    Title = "Auto Fishing",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoFishing = Value
+        if Value then AutoFishing() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoDungeon", {
+    Title = "Auto Dungeon",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoDungeon = Value
+        if Value then AutoDungeon() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoRaid", {
+    Title = "Auto Raid",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoRaid = Value
+        if Value then AutoRaid() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoFactory", {
+    Title = "Auto Factory",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoFactory = Value
+        if Value then AutoFactory() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoPirateRaid", {
+    Title = "Auto Pirate Raid",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoPirateRaid = Value
+        if Value then AutoPirateRaid() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoRipIndra", {
+    Title = "Auto Rip Indra",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoRipIndra = Value
+        if Value then AutoRipIndra() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoSoulReaper", {
+    Title = "Auto Soul Reaper",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoSoulReaper = Value
+        if Value then AutoSoulReaper() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoDoughKing", {
+    Title = "Auto Dough King",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoDoughKing = Value
+        if Value then AutoDoughKing() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoDarkbeard", {
+    Title = "Auto Darkbeard",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoDarkbeard = Value
+        if Value then AutoDarkbeard() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoEliteHunter", {
+    Title = "Auto Elite Hunter",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoEliteHunter = Value
+        if Value then AutoEliteHunter() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoTouchPadHaki", {
+    Title = "Auto Touch Pad Haki",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoTouchPadHaki = Value
+        if Value then AutoTouchPadHaki() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoFireFlowers", {
+    Title = "Auto Fire Flowers",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoFireFlowers = Value
+        if Value then AutoFireFlowers() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoBerry", {
+    Title = "Auto Berry",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoBerry = Value
+        if Value then AutoBerry() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoPrehistoric", {
+    Title = "Auto Prehistoric",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoPrehistoric = Value
+        if Value then AutoPrehistoric() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoKitsune", {
+    Title = "Auto Kitsune",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoKitsune = Value
+        if Value then AutoKitsune() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoLeviathan", {
+    Title = "Auto Leviathan",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoLeviathan = Value
+        if Value then AutoLeviathan() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoCraftVolcanicMagnet", {
+    Title = "Auto Craft Volcanic Magnet",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoCraftVolcanicMagnet = Value
+        if Value then AutoCraftVolcanicMagnet() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoQuestDojo", {
+    Title = "Auto Quest Dojo",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoQuestDojo = Value
+        if Value then AutoQuestDojo() end
+    end
+})
+
+ExtraGroup:AddToggle("AutoQuestDragonHunter", {
+    Title = "Auto Quest Dragon Hunter",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoQuestDragonHunter = Value
+        if Value then AutoQuestDragonHunter() end
+    end
+})
+
 -- ============================================
--- PHAN 10: GET QUEST DATA
+-- PHAN 29: GET QUEST DATA
 -- ============================================
 
 function GetQuestData(level)
@@ -948,4 +1655,5 @@ print("User: " .. playerName .. " (ID: " .. userId .. ")")
 print("Key: " .. playerKey)
 print("World: " .. (World1 and "Sea 1" or World2 and "Sea 2" or World3 and "Sea 3" or "Unknown"))
 print("Total Bosses: " .. #BOSS_DATA)
+print("Total Features: 29")
 print("=========================================")
